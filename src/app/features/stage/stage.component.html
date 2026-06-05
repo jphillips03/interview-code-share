@@ -1,0 +1,63 @@
+<div class="stage-container" [ngClass]="{ 'light-theme-frame': selectedTheme() === 'vs' }">
+    <!-- Upper Control Panel Grid -->
+    <header class="workspace-header">
+        <div class="meta-controls">
+            <div class="meta-section">
+                <h2>💻 Interview Code Share</h2>
+                <span class="room-pill">Room ID: {{ roomId() }}</span>
+            </div>
+            <!-- Real-Time Language Dropdown Select Frame -->
+            <div class="selector-box">
+                <label for="stage-lang">Language:</label>
+                <select
+                    id="stage-lang"
+                    [(ngModel)]="selectedLanguage"
+                    (change)="onLocalLanguageChange()"
+                >
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="typescript">TypeScript</option>
+                    <option value="python">Python</option>
+                </select>
+            </div>
+            <div class="selector-box">
+                <label for="stage-theme">Theme:</label>
+                <select
+                    id="stage-theme"
+                    [ngModel]="selectedTheme()"
+                    (ngModelChange)="onLocalThemeChange($event)"
+                >
+                    <option value="vs-dark">Dark</option>
+                    <option value="vs">Light</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="status-controls">
+            <!-- Connection State Visual Anchor Feedback -->
+            <span class="status-indicator" [ngClass]="{ connected: isConnected() }">
+                {{
+                    isConnected()
+                        ? '🟢 Peer Connected (Direct P2P)'
+                        : '⚡ Waiting for Peer Connection...'
+                }}
+            </span>
+
+            <!-- Fallback Trigger for External Guests -->
+            <button class="fallback-link-btn" (click)="copyShareableFallbackLink()">
+                📋 Copy Fallback Link
+            </button>
+        </div>
+    </header>
+
+    <!-- Central Editor Area Box -->
+    <main class="editor-workspace">
+        <app-code-editor
+            [language]="selectedLanguage()"
+            [remoteCode]="remoteCodeUpdate()"
+            [theme]="selectedTheme()"
+            (codeChanged)="onLocalCodeChange($event)"
+        >
+        </app-code-editor>
+    </main>
+</div>

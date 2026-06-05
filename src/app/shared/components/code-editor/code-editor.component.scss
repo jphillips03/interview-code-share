@@ -1,0 +1,14 @@
+.editor-frame { 
+    position: relative;
+    width: 100%; 
+    height: 100%; 
+    border: 1px solid #3c3c3c; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
+.monaco-canvas {
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://microsoft.com",
+  "manifestVersion": "1.16",
+  "version": "1.0.0",
+  "id": "YOUR-UNIQUE-GUID-HERE",
+  "packageName": "com.interview-code.share",
+  "developer": {
+    "name": "Jonathan Phillips",
+    "websiteUrl": "https://jphillips03.github.io/interview-code-share/",
+    "privacyUrl": "https://jphillips03.github.io/interview-code-share/assets/privacy.html",
+    "termsOfUseUrl": "https://jphillips03.github.io/interview-code-share/assets/terms.html"
+  },
+  "name": { "short": "Interview Code Share", "full": "Peer-to-Peer Interview Code Share" },
+  "description": { "short": "P2P code editor for interviews", "full": "Serverless code editor using WebRTC." },
+  "icons": { "color": "color.png", "outline": "outline.png" },
+  "configurableTabs": [
+    {
+      "configurationUrl": "https://jphillips03.github.io/interview-code-share/index.html#/config",
+      "canUpdateConfiguration": true,
+      "scopes": ["groupChat", "team"]
+    }
+  ],
+  "meetingExtensionDefinition": {
+    "supportsAnonymousGuestUsers": true,
+    "sidePanelTabUrl": "https://jphillips03.github.io/interview-code-share/index.html#/side-panel",
+    "meetingStageTabUrl": "https://jphillips03.github.io/interview-code-share/index.html#/stage"
+  },
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": ["*.github.io"]
+}

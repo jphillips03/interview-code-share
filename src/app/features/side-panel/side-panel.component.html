@@ -1,0 +1,20 @@
+<div class="sidepanel-container">
+    <h3>Interview Panel</h3>
+    <p class="subtitle">Control your technical assessment space from here.</p>
+
+    <div class="status-card">
+        <span class="label">Initial Language:</span>
+        <span class="value">{{ selectedLanguage() | uppercase }}</span>
+    </div>
+
+    <!-- Action Button to push the view to the center of the screen -->
+    <button class="share-btn" [disabled]="!isTeamsAvailable()" (click)="shareToMeetingStage()">
+        🚀 Share Code Editor to Stage
+    </button>
+
+    @if (!isTeamsAvailable()) {
+        <p class="warning-text">
+            Running outside Teams. Stage sharing requires the Teams client wrapper.
+        </p>
+    }
+</div>

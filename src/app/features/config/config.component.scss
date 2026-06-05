@@ -1,0 +1,36 @@
+.config-container { 
+    padding: 20px;
+    font-family:
+    sans-serif; max-width: 500px;
+}
+
+.card {
+    background: #f3f2f1;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.settings-box {
+    margin: 20px 0;
+}
+
+.status-text {
+    color: #605e5c;
+    font-size: 0.9em;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+select {
+    padding: 8px;
+    width: 100%;
+    max-width: 200px;
+    border-radius: 4px;
+}
