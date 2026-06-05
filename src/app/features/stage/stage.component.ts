@@ -102,13 +102,19 @@ export class StageComponent implements OnInit, OnDestroy {
      * into the localized host system copy-paste buffer block array.
      */
     protected copyShareableFallbackLink(): void {
-        // Generate a secure 32-character random string token
-        const cryptoToken = crypto.randomUUID().replace(/-/g, '');
-        const secureRoomId = `${this.roomId()}_token_${cryptoToken}`;
-        const currentLang = this.selectedLanguage();
+        let fallbackUrl;
+        if (this.roomId().includes('_token_')) {
+            // use existing token if it exists so user connects to same room (in case
+            // all running from browser)
+            fallbackUrl = `${CONFIG.baseUrl}/#/stage?room=${this.roomId()}&lang=${this.selectedLanguage()}`;
+        } else {
+            // Generate a secure 32-character random string token
+            const cryptoToken = crypto.randomUUID().replace(/-/g, '');
+            const secureRoomId = `${this.roomId()}_token_${cryptoToken}`;
+            const currentLang = this.selectedLanguage();
 
-        const fallbackUrl = `${CONFIG.baseUrl}/#/stage?room=${secureRoomId}&lang=${currentLang}`;
-
+            fallbackUrl = `${CONFIG.baseUrl}/#/stage?room=${secureRoomId}&lang=${currentLang}`;
+        }
         navigator.clipboard
             .writeText(fallbackUrl)
             .then(() =>

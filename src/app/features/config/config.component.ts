@@ -7,11 +7,12 @@
  * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as app from '@microsoft/teams-js';
 
-import { CONFIG } from '@app/core';
+import { CONFIG, TeamsService } from '@app/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-config',
@@ -20,6 +21,9 @@ import { CONFIG } from '@app/core';
     styleUrls: ['./config.component.scss']
 })
 export class ConfigComponent implements OnInit {
+    router = inject(Router);
+    teamsService = inject(TeamsService);
+    insideTeams = this.teamsService.isInsideTeams();
     selectedLanguage = CONFIG.language;
 
     ngOnInit() {
@@ -43,6 +47,20 @@ export class ConfigComponent implements OnInit {
 
             // Enable the save button immediately upon loading
             app.pages.config.setValidityState(true);
+        });
+    }
+
+    onStart() {
+        // Generate a secure 32-character random string token
+        const roomId = 'test';
+        const cryptoToken = crypto.randomUUID().replace(/-/g, '');
+        const secureRoomId = `${roomId}_token_${cryptoToken}`;
+
+        console.log(secureRoomId);
+        const fallbackUrl = `${CONFIG.baseUrl}/#/stage`;
+
+        this.router.navigate([fallbackUrl], {
+            queryParams: { room: secureRoomId }
         });
     }
 }

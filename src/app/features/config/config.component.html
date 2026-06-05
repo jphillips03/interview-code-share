@@ -28,5 +28,10 @@
         </select>
     </div>
 
-    <p class="status-text">Click "Save" below to add this tool to your meeting panel.</p>
+    @if (insideTeams) {
+        <p class="status-text">Click "Save" below to add this tool to your meeting panel.</p>
+    } @else {
+        <p class="status-text">Click "Start" below to open up a new meeting room.</p>
+        <button (click)="onStart()">Start</button>
+    }
 </div>
