@@ -1,19 +1,35 @@
+# This workflow will run scripts to generate typedoc JSON, parse the JSON and
+# generate markdown needed for documentation app; as well as build and deploy
+# documentation app to github pages
+
 name: Build and Deploy to GitHub Pages
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches:
-      - main # Triggers the workflow automatically on every push to main
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: write # Crucial: Gives the runner permission to write files to the gh-pages branch
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  setup_pages:
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout your source code repository code
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      # Step 1: Checkout source code repository code
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -28,14 +44,18 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # Step 4: Compile the Angular application for production
+      # build and upload documentation project
       - name: Build Angular Application
         run: npx ng build --configuration production --base-href "https://jphillips03.github.io/interview-code-share/"
-
-      # Step 5: Deploy the built output files to the gh-pages branch
+  
+  # deploy job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: [setup_pages, build_and_upload]
+    steps:
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist/interview-code-share/browser
-          branch: gh-pages
-          clean: true # Automatically removes old obsolete files from previous deployments
+        id: deployment
+        uses: actions/deploy-pages@v4
