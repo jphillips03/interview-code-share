@@ -1,0 +1,41 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow automatically on every push to main
+
+permissions:
+  contents: write # Crucial: Gives the runner permission to write files to the gh-pages branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout your source code repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Node.js runtime environment match
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # Step 3: Install all project workspace dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step 4: Compile the Angular application for production
+      - name: Build Angular Application
+        run: npx ng build --configuration production --base-href "https://jphillips03.github.io/interview-code-share/"
+
+      # Step 5: Deploy the built output files to the gh-pages branch
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist/interview-code-share/browser
+          branch: gh-pages # Target branch for static hosting
+          clean: true # Automatically removes old obsolete files from previous deployments
