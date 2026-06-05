@@ -37,5 +37,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist/interview-code-share/browser
-          branch: gh-pages # Target branch for static hosting
+          branch: gh-pages
           clean: true # Automatically removes old obsolete files from previous deployments
