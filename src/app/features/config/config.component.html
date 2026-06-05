@@ -8,15 +8,23 @@
             <li>✔️ No data is saved on external servers (Fully P2P).</li>
             <li>✔️ Monaco Editor (VS Code engine) will load automatically.</li>
             <li>✔️ A fallback link will be ready if your candidate is an external guest.</li>
+            <li>
+                You will see '⚡ Waiting for Peer Connection...' in the top right corner of the
+                screen until anyone else connects to the room.
+            </li>
+            <li>
+                Once a connection is made successfully you will see '🟢 Peer Connected (Direct P2P)'
+            </li>
         </ul>
     </div>
 
     <div class="settings-box">
         <label for="lang-select">Default Coding Language:</label>
         <select id="lang-select" [(ngModel)]="selectedLanguage">
+            <option value="java">Java</option>
             <option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option>
-            <option value="python">Java</option>
+            <option value="python">Python</option>
         </select>
     </div>
 

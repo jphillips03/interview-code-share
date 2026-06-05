@@ -4,13 +4,15 @@
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at
- * https://github.com/ngx-material-dashboard/ngx-material-dashboard/blob/main/LICENSE
+ * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
 import { UpperCasePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as teamsSDK from '@microsoft/teams-js';
+
+import { CONFIG } from '@app/core';
 
 @Component({
     selector: 'app-side-panel',
@@ -50,8 +52,7 @@ export class SidePanelComponent implements OnInit {
         if (!this.isTeamsAvailable()) return;
 
         // Define the static target endpoint for the shared stage workspace view
-        const baseUrl = 'https://<your-username>.github.io/<repo-name>/index.html';
-        const stageUrl = `${baseUrl}#/stage?lang=${this.selectedLanguage()}`;
+        const stageUrl = `${CONFIG.baseUrl}/#/stage?lang=${this.selectedLanguage()}`;
 
         // Invoke the explicit application sharing mechanism in the meeting module
         teamsSDK.meeting.shareAppContentToStage((err, result) => {

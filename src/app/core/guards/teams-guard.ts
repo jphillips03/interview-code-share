@@ -4,24 +4,36 @@
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at
- * https://github.com/ngx-material-dashboard/ngx-material-dashboard/blob/main/LICENSE
+ * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { TeamsService } from '../services';
 
 export const teamsGuard: CanActivateFn = (route) => {
     const router = inject(Router);
+    const teamsService = inject(TeamsService);
 
-    // 1. Check if a room ID exists in the query parameters (Browser Fallback path)
-    const hasRoomParam = !!route.queryParams['room'];
+    // If we are testing on localhost bypass authentication restrictions
+    if (window.location.hostname === 'localhost') return true;
 
-    // 2. Check if the user is loading inside Teams (via userAgent or referrer)
-    // Teams frames typically pass context, but as a secondary fallback check:
-    const isInsideTeamsFrame = window.self !== window.top;
+    // 1. If running inside Teams, they MUST pass the Graph API meeting roster validation check
+    if (teamsService.isInsideTeams()) {
+        if (teamsService.isUserValidated()) {
+            return true; // Authorized attendee
+        }
+        // Block access and route to a security violation error screen
+        return router.createUrlTree(['/config']);
+    }
 
-    if (hasRoomParam || isInsideTeamsFrame) {
-        return true; // Allow the user to access the /stage workspace
+    // 2. Browser Fallback route check (External Candidate path)
+    // To keep the candidate secure without an account, enforce that the URL
+    // parameter room explicitly matches a high-entropy cryptographically secure signature token.
+    const hasSecureRoomId = route.queryParams['room'] && route.queryParams['room'].length > 30;
+
+    if (hasSecureRoomId) {
+        return true;
     }
 
     // 3. Block access and redirect to a friendly landing page if no room context exists

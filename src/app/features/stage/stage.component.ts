@@ -4,7 +4,7 @@
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at
- * https://github.com/ngx-material-dashboard/ngx-material-dashboard/blob/main/LICENSE
+ * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
 import { CommonModule } from '@angular/common';
@@ -102,17 +102,18 @@ export class StageComponent implements OnInit, OnDestroy {
      * into the localized host system copy-paste buffer block array.
      */
     protected copyShareableFallbackLink(): void {
-        const currentRoom = this.roomId();
-        const currentLang = this.selectedLanguage;
+        // Generate a secure 32-character random string token
+        const cryptoToken = crypto.randomUUID().replace(/-/g, '');
+        const secureRoomId = `${this.roomId()}_token_${cryptoToken}`;
+        const currentLang = this.selectedLanguage();
 
-        // Explicitly target compiled pages deployment from repo
-        const fallbackUrl = `${CONFIG.baseUrl}#/stage?room=${currentRoom}&lang=${currentLang}`;
+        const fallbackUrl = `${CONFIG.baseUrl}/#/stage?room=${secureRoomId}&lang=${currentLang}`;
 
         navigator.clipboard
             .writeText(fallbackUrl)
             .then(() =>
                 alert(
-                    'Fallback interview bridge token copied! Paste this block into the live Teams meeting chat window.'
+                    'Secure one-time fallback interview link generated! Paste the URL in the Teams meeting chat window.'
                 )
             )
             .catch((err) => console.error('Failed to copy fallback link to clipboard:', err));

@@ -4,7 +4,7 @@
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at
- * https://github.com/ngx-material-dashboard/ngx-material-dashboard/blob/main/LICENSE
+ * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
 import { Component, OnInit } from '@angular/core';
@@ -32,9 +32,9 @@ export class ConfigComponent implements OnInit {
 
                 app.pages.config
                     .setConfig({
-                        suggestedDisplayName: 'P2P Code Share',
-                        contentUrl: `${baseUrl}#/side-panel?lang=${this.selectedLanguage}`,
-                        websiteUrl: `${baseUrl}#/fallback`
+                        suggestedDisplayName: 'Interview Code Share',
+                        contentUrl: `${baseUrl}/#/side-panel?lang=${this.selectedLanguage}`,
+                        websiteUrl: `${baseUrl}/#/fallback`
                     })
                     .then(() => {
                         saveEvent.notifySuccess();

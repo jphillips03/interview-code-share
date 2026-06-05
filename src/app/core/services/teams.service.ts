@@ -4,7 +4,7 @@
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at
- * https://github.com/ngx-material-dashboard/ngx-material-dashboard/blob/main/LICENSE
+ * https://github.com/jphillips03/interview-code-share/blob/main/LICENSE
  */
 
 import { Injectable, signal, inject, NgZone } from '@angular/core';
@@ -25,6 +25,9 @@ export class TeamsService {
 
     public isInsideTeams = signal<boolean>(false);
     public isInitialized = signal<boolean>(false);
+    // Track if the current user has been verified by the M365 infrastructure
+    public isUserValidated = signal<boolean>(false);
+    public authToken = signal<string | null>(null);
     public meetingContext = signal<TeamsMeetingContext>({
         meetingId: null,
         tenantId: null,
@@ -59,6 +62,9 @@ export class TeamsService {
                         isAnonymous: context.user?.loginHint ? false : true
                     });
 
+                    // Trigger token acquisition as soon as context is confirmed
+                    this.acquireUserSecurityToken();
+
                     console.log('Successfully mapped Microsoft Teams system context parameters.');
                 });
             })
@@ -72,6 +78,65 @@ export class TeamsService {
                     'Teams SDK initialization omitted. Operating in standard web container mode.',
                     err
                 );
+            });
+    }
+
+    /**
+     * Leverages Teams Single Sign-On (SSO) to get a cryptographically secure
+     * token proving the user's authentic identity.
+     */
+    private acquireUserSecurityToken(): void {
+        teamsSDK.authentication
+            .getAuthToken()
+            .then((token) => {
+                this.ngZone.run(() => {
+                    this.authToken.set(token);
+                    this.validateMeetingMembership(token);
+                });
+            })
+            .catch((err) => {
+                console.error('SSO Token acquisition rejected:', err);
+                this.ngZone.run(() => {
+                    this.isInitialized.set(true);
+                });
+            });
+    }
+
+    /**
+     * Simulates/Executes client-side verification via Microsoft Graph API.
+     */
+    private validateMeetingMembership(token: string): void {
+        const meetingId = this.meetingContext().meetingId;
+
+        if (!meetingId) {
+            this.isInitialized.set(true);
+            return;
+        }
+
+        // In a serverless client, you hit the Graph API endpoint for meetings:
+        // https://microsoft.com{meetingId}
+        // passing the 'Authorization: Bearer ' + token header.
+
+        fetch(`https://microsoft.com${meetingId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then((res) => {
+                this.ngZone.run(() => {
+                    if (res.ok) {
+                        // 200 OK: Microsoft confirms this user is an attendee of this meeting!
+                        this.isUserValidated.set(true);
+                    } else {
+                        // 403/404: User is signed into a different tenant or meeting entirely
+                        this.isUserValidated.set(false);
+                        console.warn('Security Blockade: User is not part of this meeting roster.');
+                    }
+                    this.isInitialized.set(true);
+                });
+            })
+            .catch(() => {
+                this.ngZone.run(() => {
+                    this.isInitialized.set(true);
+                });
             });
     }
 
