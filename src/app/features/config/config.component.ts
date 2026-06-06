@@ -52,7 +52,7 @@ export class ConfigComponent implements OnInit {
 
     onStart() {
         // Generate a secure 32-character random string token
-        const roomId = 'test';
+        const roomId = 'interview_room';
         const cryptoToken = crypto.randomUUID().replace(/-/g, '');
         const secureRoomId = `${roomId}_token_${cryptoToken}`;
 

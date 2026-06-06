@@ -26,6 +26,19 @@ export class WebRtcService {
     private ngZone = inject(NgZone);
     private peer: Peer | null = null;
     private conn: DataConnection | null = null;
+    private fallbackPeerOptions = {
+        config: {
+            iceServers: [
+                {
+                    urls: 'turns:openrelay.metered.ca:443',
+                    username: 'openrelayproject',
+                    credential: 'openrelayproject'
+                }
+            ],
+            // Optional: force the browser to prioritize relay candidates if debugging
+            iceTransportPolicy: 'all' as RTCIceTransportPolicy
+        }
+    };
 
     public isConnected = signal<boolean>(false);
     public remoteCodeUpdate = signal<string | null>(null);
@@ -49,9 +62,7 @@ export class WebRtcService {
                   path: '/interview-code-share',
                   debug: 3
               }
-            : {
-                  config: { iceServers: [{ urls: 'stun:://google.com' }] }
-              };
+            : this.fallbackPeerOptions;
 
         console.log(
             `Initializing PeerJS in ${isLocal ? 'LOCAL LOOPBACK' : 'PRODUCTION CLOUD'} mode.`
