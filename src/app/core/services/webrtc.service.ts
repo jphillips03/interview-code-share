@@ -19,6 +19,11 @@ interface PeerJsError extends Error {
     type?: string;
 }
 
+/**
+ * Handles p2p initialization, setting up appropriate listeners, and disconnect.
+ * Requires valid username/credential combination for open relay metered TURN
+ * servers to handle the initial handshake between peers.
+ */
 @Injectable({
     providedIn: 'root'
 })

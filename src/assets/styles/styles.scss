@@ -1,3 +1,25 @@
 body {
     margin: 0;
 }
+
+/* Dropdown Component Styling Layouts */
+.selector-box { 
+    display: flex;
+    align-items:
+    center;
+    gap: 8px;
+    font-size: 13px;
+}
+.selector-box select {
+    background: #3c3c3c; 
+    color:white;
+    border: 1px solid #555555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.selector-box select:focus {
+    border-color: #5b5fc7;
+    outline: none;
+}

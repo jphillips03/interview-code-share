@@ -113,10 +113,9 @@ export class TeamsService {
             return;
         }
 
-        // In a serverless client, you hit the Graph API endpoint for meetings:
+        // In a serverless client, you the Graph API endpoint for meetings:
         // https://microsoft.com{meetingId}
         // passing the 'Authorization: Bearer ' + token header.
-
         fetch(`https://microsoft.com${meetingId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -142,7 +141,6 @@ export class TeamsService {
 
     /**
      * Helper utility method to prompt Teams to share content straight to center stage.
-     * Exposing this from a service keeps your SidePanel component lightweight.
      */
     public shareAppViewToMeetingStage(targetStageUrl: string): Promise<boolean> {
         return new Promise((resolve, reject) => {

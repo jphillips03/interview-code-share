@@ -67,8 +67,6 @@ export class ConfigComponent implements OnInit {
         const roomId = 'interview_room';
         const cryptoToken = crypto.randomUUID().replace(/-/g, '');
         const secureRoomId = `${roomId}_token_${cryptoToken}`;
-
-        console.log(secureRoomId);
         const fallbackUrl = `${CONFIG.baseUrl}/#/stage`;
 
         this.router.navigate([fallbackUrl], {
