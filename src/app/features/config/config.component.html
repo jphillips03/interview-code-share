@@ -1,37 +1,51 @@
-<div class="config-container">
-    <h2>Technical Interview Setup</h2>
-    <p class="subtitle">Configure your peer-to-peer coding workspace.</p>
+<div class="container">
+    <div class="config-container">
+        <h2>Technical Interview Setup</h2>
+        <p class="subtitle">Configure your peer-to-peer coding workspace.</p>
 
-    <div class="card">
-        <h3>📋 Interview Pre-Flight Checklist</h3>
-        <ul>
-            <li>✔️ No data is saved on external servers (Fully P2P).</li>
-            <li>✔️ Monaco Editor (VS Code engine) will load automatically.</li>
-            <li>✔️ A fallback link will be ready if your candidate is an external guest.</li>
-            <li>
-                You will see '⚡ Waiting for Peer Connection...' in the top right corner of the
-                screen until anyone else connects to the room.
-            </li>
-            <li>
-                Once a connection is made successfully you will see '🟢 Peer Connected (Direct P2P)'
-            </li>
-        </ul>
+        <div class="card">
+            <h3>📋 Interview Pre-Flight Checklist</h3>
+            <ul>
+                <li>✔️ No data is saved on external servers (Fully P2P).</li>
+                <li>✔️ Monaco Editor (VS Code engine) will load automatically.</li>
+                <li>✔️ A fallback link will be ready if your candidate is an external guest.</li>
+                <li>
+                    You will see '⚡ Waiting for Peer Connection...' in the top right corner of the
+                    screen until anyone else connects to the room.
+                </li>
+                <li>
+                    Once a connection is made successfully you will see '🟢 Peer Connected (Direct
+                    P2P)'
+                </li>
+            </ul>
+        </div>
+
+        <div class="settings-box">
+            <label for="lang-select">Default Coding Language:</label>
+            <select id="lang-select" [(ngModel)]="selectedLanguage">
+                <option value="java">Java</option>
+                <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        @if (insideTeams) {
+            <p class="status-text">Click "Save" below to add this tool to your meeting panel.</p>
+        } @else {
+            <div class="card turn-settings">
+                <h3>🌐 Enterprise ICE/TURN Server Configuration (Optional)</h3>
+                <div class="input-group">
+                    <label>Username:</label>
+                    <input type="text" [(ngModel)]="turnUser" placeholder="open-relay-username" />
+                </div>
+                <div class="input-group">
+                    <label>Credential/Password:</label>
+                    <input type="password" [(ngModel)]="turnCred" placeholder="open-relay-secret" />
+                </div>
+            </div>
+            <p class="status-text">Click "Start" below to open up a new meeting room.</p>
+            <button (click)="onStart()">Start</button>
+        }
     </div>
-
-    <div class="settings-box">
-        <label for="lang-select">Default Coding Language:</label>
-        <select id="lang-select" [(ngModel)]="selectedLanguage">
-            <option value="java">Java</option>
-            <option value="javascript">JavaScript</option>
-            <option value="typescript">TypeScript</option>
-            <option value="python">Python</option>
-        </select>
-    </div>
-
-    @if (insideTeams) {
-        <p class="status-text">Click "Save" below to add this tool to your meeting panel.</p>
-    } @else {
-        <p class="status-text">Click "Start" below to open up a new meeting room.</p>
-        <button (click)="onStart()">Start</button>
-    }
 </div>

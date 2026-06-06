@@ -25,6 +25,8 @@ export class ConfigComponent implements OnInit {
     teamsService = inject(TeamsService);
     insideTeams = this.teamsService.isInsideTeams();
     selectedLanguage = CONFIG.language;
+    turnUser = '';
+    turnCred = '';
 
     ngOnInit() {
         // Initialize Teams SDK
@@ -34,10 +36,20 @@ export class ConfigComponent implements OnInit {
                 // Define where Teams should point when loading the app inside the meeting
                 const baseUrl = CONFIG.baseUrl;
 
+                let turnString = '';
+                if (this.turnUser && this.turnCred) {
+                    const turnData = {
+                        user: this.turnUser,
+                        cred: this.turnCred
+                    };
+                    // Encrypt to safe Base64 token to prevent raw parameter characters from crashing URLs [3]
+                    turnString = btoa(JSON.stringify(turnData));
+                }
+
                 app.pages.config
                     .setConfig({
                         suggestedDisplayName: 'Interview Code Share',
-                        contentUrl: `${baseUrl}/#/side-panel?lang=${this.selectedLanguage}`,
+                        contentUrl: `${baseUrl}/#/side-panel?lang=${this.selectedLanguage}&turn=${turnString}`,
                         websiteUrl: `${baseUrl}/#/fallback`
                     })
                     .then(() => {

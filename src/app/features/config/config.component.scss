@@ -1,7 +1,12 @@
-.config-container { 
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.config-container {
     padding: 20px;
     font-family:
-    sans-serif; max-width: 500px;
+    sans-serif; max-width: 800px;
 }
 
 .card {
@@ -10,6 +15,10 @@
     border-radius: 4px;
     margin: 15px 0;
 }
+
+.input-group { display: flex; flex-direction: column; margin-bottom: 12px; }
+.input-group label { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.input-group input, select { padding: 8px; border: 1px solid #d1d1d1; border-radius: 4px; }
 
 .settings-box {
     margin: 20px 0;

@@ -33,6 +33,9 @@ export class StageComponent implements OnInit, OnDestroy {
     protected selectedLanguage = signal<string>('java');
     protected selectedTheme = signal<string>('vs');
 
+    // Track parsed custom ICE servers array profile settings globally
+    private rawTurnParam = '';
+
     constructor() {
         // Handle incoming remote language updates from WebRTC data pipeline
         effect(() => {
@@ -47,6 +50,26 @@ export class StageComponent implements OnInit, OnDestroy {
         // changes are not recognized across rooms
         effect(() => {
             if (!this.teamsService.isInitialized()) return;
+
+            // Process TURN parameter decoding strings safely out of base64 bounds
+            this.rawTurnParam = this.route.snapshot.queryParams['turn'] || '';
+            if (this.rawTurnParam) {
+                try {
+                    const decryptedTurn = JSON.parse(atob(this.rawTurnParam));
+                    this.webRtcService.initializeOpenRelayCredentials(
+                        decryptedTurn.user,
+                        decryptedTurn.cred
+                    );
+                    console.log(
+                        'Successfully active: Custom Enterprise TURN network profile arrays.'
+                    );
+                } catch (e) {
+                    console.error(
+                        'Failed to parse incoming TURN credentials array packet metrics.',
+                        e
+                    );
+                }
+            }
 
             if (this.teamsService.isInsideTeams()) {
                 const teamsMeetingId = this.teamsService.meetingContext().meetingId;

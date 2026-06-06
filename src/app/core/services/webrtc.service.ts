@@ -26,42 +26,47 @@ export class WebRtcService {
     private ngZone = inject(NgZone);
     private peer: Peer | null = null;
     private conn: DataConnection | null = null;
-    private fallbackPeerOptions = {
-        config: {
-            iceServers: [
-                {
-                    urls: 'stun:stun.relay.metered.ca:80'
-                },
-                {
-                    urls: 'turn:global.relay.metered.ca:80',
-                    username: '94e09760f9e235c04b0891b3',
-                    credential: 'nqQ6dgzK2Dl7mHEp'
-                },
-                {
-                    urls: 'turn:global.relay.metered.ca:80?transport=tcp',
-                    username: '94e09760f9e235c04b0891b3',
-                    credential: 'nqQ6dgzK2Dl7mHEp'
-                },
-                {
-                    urls: 'turn:global.relay.metered.ca:443',
-                    username: '94e09760f9e235c04b0891b3',
-                    credential: 'nqQ6dgzK2Dl7mHEp'
-                },
-                {
-                    urls: 'turns:global.relay.metered.ca:443?transport=tcp',
-                    username: '94e09760f9e235c04b0891b3',
-                    credential: 'nqQ6dgzK2Dl7mHEp'
-                }
-            ],
-            // Optional: force the browser to prioritize relay candidates if debugging
-            iceTransportPolicy: 'all' as RTCIceTransportPolicy
-        }
-    };
 
     public isConnected = signal<boolean>(false);
     public remoteCodeUpdate = signal<string | null>(null);
     public remoteLanguageUpdate = signal<string | null>(null);
     public currentRoomId = signal<string | null>(null);
+
+    private fallbackPeerOptions = {};
+
+    public initializeOpenRelayCredentials(username: string, credential: string) {
+        this.fallbackPeerOptions = {
+            config: {
+                iceServers: [
+                    {
+                        urls: 'stun:stun.relay.metered.ca:80'
+                    },
+                    {
+                        urls: 'turn:global.relay.metered.ca:80',
+                        username: username,
+                        credential: credential
+                    },
+                    {
+                        urls: 'turn:global.relay.metered.ca:80?transport=tcp',
+                        username: username,
+                        credential: credential
+                    },
+                    {
+                        urls: 'turn:global.relay.metered.ca:443',
+                        username: username,
+                        credential: credential
+                    },
+                    {
+                        urls: 'turns:global.relay.metered.ca:443?transport=tcp',
+                        username: username,
+                        credential: credential
+                    }
+                ],
+                // Optional: force the browser to prioritize relay candidates if debugging
+                iceTransportPolicy: 'all' as RTCIceTransportPolicy
+            }
+        };
+    }
 
     public initializePeer(roomId: string): void {
         if (this.peer) return; // Prevent double initialization
