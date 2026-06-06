@@ -30,9 +30,27 @@ export class WebRtcService {
         config: {
             iceServers: [
                 {
-                    urls: 'turns:openrelay.metered.ca:443',
-                    username: 'openrelayproject',
-                    credential: 'openrelayproject'
+                    urls: 'stun:stun.relay.metered.ca:80'
+                },
+                {
+                    urls: 'turn:global.relay.metered.ca:80',
+                    username: '94e09760f9e235c04b0891b3',
+                    credential: 'nqQ6dgzK2Dl7mHEp'
+                },
+                {
+                    urls: 'turn:global.relay.metered.ca:80?transport=tcp',
+                    username: '94e09760f9e235c04b0891b3',
+                    credential: 'nqQ6dgzK2Dl7mHEp'
+                },
+                {
+                    urls: 'turn:global.relay.metered.ca:443',
+                    username: '94e09760f9e235c04b0891b3',
+                    credential: 'nqQ6dgzK2Dl7mHEp'
+                },
+                {
+                    urls: 'turns:global.relay.metered.ca:443?transport=tcp',
+                    username: '94e09760f9e235c04b0891b3',
+                    credential: 'nqQ6dgzK2Dl7mHEp'
                 }
             ],
             // Optional: force the browser to prioritize relay candidates if debugging
