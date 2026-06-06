@@ -42,22 +42,22 @@ export class WebRtcService {
                         urls: 'stun:stun.relay.metered.ca:80'
                     },
                     {
-                        urls: 'turn:global.relay.metered.ca:80',
+                        urls: 'turn:standard.relay.metered.ca:80',
                         username: username,
                         credential: credential
                     },
                     {
-                        urls: 'turn:global.relay.metered.ca:80?transport=tcp',
+                        urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
                         username: username,
                         credential: credential
                     },
                     {
-                        urls: 'turn:global.relay.metered.ca:443',
+                        urls: 'turn:standard.relay.metered.ca:443',
                         username: username,
                         credential: credential
                     },
                     {
-                        urls: 'turns:global.relay.metered.ca:443?transport=tcp',
+                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
                         username: username,
                         credential: credential
                     }
