@@ -9,8 +9,10 @@
 
 import {
     Component,
+    effect,
     ElementRef,
     EventEmitter,
+    inject,
     Input,
     OnDestroy,
     OnInit,
@@ -19,7 +21,7 @@ import {
 } from '@angular/core';
 import loader from '@monaco-editor/loader';
 
-import { CONFIG } from '@app/core';
+import { CONFIG, WebRtcService } from '@app/core';
 
 @Component({
     selector: 'app-code-editor',
@@ -31,6 +33,8 @@ import { CONFIG } from '@app/core';
 export class CodeEditorComponent implements OnInit, OnDestroy {
     @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
     @Output() codeChanged = new EventEmitter<string>();
+
+    protected webRtcService = inject(WebRtcService);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private editor: any = null;
@@ -81,11 +85,27 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
         }
     }
 
+    constructor() {
+        effect(() => {
+            const state = this.webRtcService.editorState();
+            if (this.monacoInstance && !this.isHandlingRemoteUpdate) {
+                const currentModelValue = this.monacoInstance.getValue();
+
+                if (currentModelValue !== state.text) {
+                    // Flag prevents infinite feedback loops while altering editor values programmatically
+                    this.isHandlingRemoteUpdate = true;
+                    this.monacoInstance.setValue(state.text);
+                    this.isHandlingRemoteUpdate = false;
+                }
+            }
+        });
+    }
+
     ngOnInit() {
         loader.init().then((monaco) => {
             this.monacoInstance = monaco;
             this.editor = monaco.editor.create(this.editorContainer.nativeElement, {
-                value: CONFIG.defaultEditorText,
+                value: this.webRtcService.editorState().text || CONFIG.defaultEditorText,
                 language: this.language,
                 theme: this.theme,
                 automaticLayout: true,
@@ -95,6 +115,7 @@ export class CodeEditorComponent implements OnInit, OnDestroy {
 
             this.editor.onDidChangeModelContent(() => {
                 if (this.isHandlingRemoteUpdate) return;
+
                 const currentText = this.editor.getValue();
                 this.codeChanged.emit(currentText);
             });

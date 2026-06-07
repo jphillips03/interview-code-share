@@ -27,6 +27,7 @@ export class StageComponent implements OnInit, OnDestroy {
     private webRtcService = inject(WebRtcService);
     private teamsService = inject(TeamsService);
 
+    protected connectionStatus = this.webRtcService.connectionStatus;
     protected isConnected = this.webRtcService.isConnected;
     protected remoteCodeUpdate = this.webRtcService.remoteCodeUpdate;
     protected roomId = signal<string>('Initializing...');
@@ -75,7 +76,7 @@ export class StageComponent implements OnInit, OnDestroy {
                 const teamsMeetingId = this.teamsService.meetingContext().meetingId;
                 if (teamsMeetingId) {
                     this.roomId.set(teamsMeetingId);
-                    this.webRtcService.initializePeer(teamsMeetingId);
+                    this.webRtcService.initializePeer(teamsMeetingId, 'interviewer');
                     return;
                 }
             }
@@ -85,7 +86,8 @@ export class StageComponent implements OnInit, OnDestroy {
             const assignedRoomId =
                 browserUrlRoomId || 'room-' + Math.random().toString(36).substring(7);
             this.roomId.set(assignedRoomId);
-            this.webRtcService.initializePeer(assignedRoomId);
+            const role = this.route.snapshot.queryParams['role'] || 'candidate';
+            this.webRtcService.initializePeer(assignedRoomId, role);
         });
     }
 
@@ -102,7 +104,7 @@ export class StageComponent implements OnInit, OnDestroy {
      * Streams out mutations immediately across the active direct WebRTC out-of-band data pipeline.
      */
     protected onLocalCodeChange(currentText: string): void {
-        this.webRtcService.broadcastCodeChange(currentText);
+        this.webRtcService.updateLocalState(currentText);
     }
 
     /**

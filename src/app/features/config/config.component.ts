@@ -11,7 +11,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as app from '@microsoft/teams-js';
 
-import { CONFIG, TeamsService } from '@app/core';
+import { CONFIG, TeamsService, WebRtcService } from '@app/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 export class ConfigComponent implements OnInit {
     router = inject(Router);
     teamsService = inject(TeamsService);
+    webRtcService = inject(WebRtcService);
     insideTeams = this.teamsService.isInsideTeams();
     selectedLanguage = CONFIG.language;
     turnUser = '';
@@ -69,8 +70,10 @@ export class ConfigComponent implements OnInit {
         const secureRoomId = `${roomId}_token_${cryptoToken}`;
         const fallbackUrl = `${CONFIG.baseUrl}/#/stage`;
 
+        // reset any cached data so previous code does not show
+        this.webRtcService.resetLocalState();
         this.router.navigate([fallbackUrl], {
-            queryParams: { room: secureRoomId }
+            queryParams: { room: secureRoomId, role: 'interviewer' }
         });
     }
 }

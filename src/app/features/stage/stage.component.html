@@ -36,11 +36,7 @@
         <div class="status-controls">
             <!-- Connection State Visual Anchor Feedback -->
             <span class="status-indicator" [ngClass]="{ connected: isConnected() }">
-                {{
-                    isConnected()
-                        ? '🟢 Peer Connected (Direct P2P)'
-                        : '⚡ Waiting for Peer Connection...'
-                }}
+                {{ connectionStatus() }}
             </span>
 
             <!-- Fallback Trigger for External Guests -->
