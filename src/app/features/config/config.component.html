@@ -10,14 +10,6 @@
                 <li>✔️ Monaco Editor (VS Code engine) will load automatically.</li>
                 <li>✔️ A fallback link will be ready if your candidate is an external guest.</li>
                 <li>
-                    ✔️ Credentials for open relay metered servers are required below (free account
-                    options available <a href="https://dashboard.metered.ca/signup">here</a>); A
-                    direct UDP connection is attempted, but a TURN server is used as a fallback to
-                    handle streaming connection data between peers. If utilized the TURN server
-                    routes packets securely through pre-encrypted DTLS-SRTP protocols, it cannot
-                    decrypt or view any data exchanged between peers.
-                </li>
-                <li>
                     You will see '⚡ Waiting for Peer Connection...' in the top right corner of the
                     screen until anyone else connects to the room.
                 </li>
@@ -39,14 +31,32 @@
         </div>
 
         <div class="card turn-settings">
-            <h3>🌐 Enterprise ICE/TURN Server Configuration</h3>
+            <h3>🌐 Enterprise ICE/TURN Server Configuration (optional)</h3>
+            <p>
+                Credentials for open relay metered servers are optional below (free account options
+                available <a href="https://dashboard.metered.ca/signup">here</a>); A direct UDP
+                connection is attempted using a STUN server, but a TURN server may be used as a
+                fallback to handle streaming connection data between peers. If utilized the TURN
+                server routes packets securely through pre-encrypted DTLS-SRTP protocols, it cannot
+                decrypt or view any data exchanged between peers.
+            </p>
             <div class="input-group">
-                <label>Username:</label>
-                <input type="text" [(ngModel)]="turnUser" placeholder="open-relay-username" />
+                <label for="username">Username:</label>
+                <input
+                    id="username"
+                    type="text"
+                    [(ngModel)]="turnUser"
+                    placeholder="open-relay-username"
+                />
             </div>
             <div class="input-group">
-                <label>Credential/Password:</label>
-                <input type="password" [(ngModel)]="turnCred" placeholder="open-relay-secret" />
+                <label for="password">Credential/Password:</label>
+                <input
+                    id="password"
+                    type="password"
+                    [(ngModel)]="turnCred"
+                    placeholder="open-relay-secret"
+                />
             </div>
         </div>
         @if (insideTeams) {
