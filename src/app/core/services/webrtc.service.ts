@@ -55,6 +55,17 @@ export class WebRtcService {
                         urls: 'stun:stun.relay.metered.ca:80'
                     },
                     {
+                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
+                        username: username,
+                        credential: credential
+                    },
+                    ,
+                    {
+                        urls: 'turn:standard.relay.metered.ca:443',
+                        username: username,
+                        credential: credential
+                    },
+                    {
                         urls: 'turn:standard.relay.metered.ca:80',
                         username: username,
                         credential: credential
@@ -63,21 +74,11 @@ export class WebRtcService {
                         urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
                         username: username,
                         credential: credential
-                    },
-                    {
-                        urls: 'turn:standard.relay.metered.ca:443',
-                        username: username,
-                        credential: credential
-                    },
-                    {
-                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
-                        username: username,
-                        credential: credential
                     }
-                ],
-                // Optional: force the browser to prioritize relay candidates if debugging
-                iceTransportPolicy: 'all' as RTCIceTransportPolicy
-            }
+                ]
+            },
+            // Optional: force the browser to prioritize relay candidates
+            iceTransportPolicy: 'relay' as RTCIceTransportPolicy
         };
     }
 
@@ -104,6 +105,9 @@ export class WebRtcService {
               }
             : this.fallbackPeerOptions;
 
+        console.log(
+            `Initializing PeerJS: Using policy: [${peerOptions.iceTransportPolicy || 'default'}].`
+        );
         console.log(
             `Initializing PeerJS in ${isLocal ? 'LOCAL LOOPBACK' : 'PRODUCTION CLOUD'} mode.`
         );
