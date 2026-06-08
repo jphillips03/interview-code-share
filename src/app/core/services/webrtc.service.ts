@@ -105,7 +105,6 @@ export class WebRtcService {
               }
             : this.fallbackPeerOptions;
 
-        console.log(peerOptions);
         console.log(
             `Initializing PeerJS in ${isLocal ? 'LOCAL LOOPBACK' : 'PRODUCTION CLOUD'} mode.`
         );

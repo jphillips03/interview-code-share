@@ -140,6 +140,12 @@ export class StageComponent implements OnInit, OnDestroy {
 
             fallbackUrl = `${CONFIG.baseUrl}/#/stage?room=${secureRoomId}&lang=${currentLang}`;
         }
+
+        // add TURN config to queryParams if defined...
+        if (this.route.snapshot.queryParams['turn']) {
+            fallbackUrl += `&turn=${this.route.snapshot.queryParams['turn']}`;
+        }
+
         navigator.clipboard
             .writeText(fallbackUrl)
             .then(() =>
