@@ -52,15 +52,7 @@ export class WebRtcService {
             config: {
                 iceServers: [
                     {
-                        urls: 'stun:stun.relay.metered.ca:80'
-                    },
-                    {
-                        urls: 'turn:standard.relay.metered.ca:80',
-                        username: username,
-                        credential: credential
-                    },
-                    {
-                        urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
+                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
                         username: username,
                         credential: credential
                     },
@@ -70,13 +62,11 @@ export class WebRtcService {
                         credential: credential
                     },
                     {
-                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
-                        username: username,
-                        credential: credential
+                        urls: 'stun:stun.relay.metered.ca:80'
                     }
                 ],
                 // Optional: force the browser to prioritize relay candidates if debugging
-                iceTransportPolicy: 'all' as RTCIceTransportPolicy
+                iceTransportPolicy: 'relay' as RTCIceTransportPolicy
             }
         };
         console.log(this.fallbackPeerOptions);
