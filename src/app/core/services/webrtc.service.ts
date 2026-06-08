@@ -8,7 +8,7 @@
  */
 
 import { inject, Injectable, NgZone, signal } from '@angular/core';
-import { Peer, DataConnection, PeerOptions } from 'peerjs';
+import { Peer, DataConnection } from 'peerjs';
 import { EditorPayload } from '@app/shared';
 import { CONFIG } from '../constants';
 
@@ -45,7 +45,7 @@ export class WebRtcService {
     public connectionStatus = signal<string>('⚡ Waiting for Peer Connection...');
     public currentRoomId = signal<string | null>(null);
 
-    private fallbackPeerOptions: PeerOptions = {};
+    private fallbackPeerOptions = {};
 
     public initializeOpenRelayCredentials(username: string, credential: string) {
         this.fallbackPeerOptions = {
@@ -53,17 +53,6 @@ export class WebRtcService {
                 iceServers: [
                     {
                         urls: 'stun:stun.relay.metered.ca:80'
-                    },
-                    {
-                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
-                        username: username,
-                        credential: credential
-                    },
-                    ,
-                    {
-                        urls: 'turn:standard.relay.metered.ca:443',
-                        username: username,
-                        credential: credential
                     },
                     {
                         urls: 'turn:standard.relay.metered.ca:80',
@@ -74,12 +63,23 @@ export class WebRtcService {
                         urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
                         username: username,
                         credential: credential
+                    },
+                    {
+                        urls: 'turn:standard.relay.metered.ca:443',
+                        username: username,
+                        credential: credential
+                    },
+                    {
+                        urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
+                        username: username,
+                        credential: credential
                     }
                 ],
-                // Optional: force the browser to prioritize relay candidates
-                iceTransportPolicy: 'relay' as RTCIceTransportPolicy
+                // Optional: force the browser to prioritize relay candidates if debugging
+                iceTransportPolicy: 'all' as RTCIceTransportPolicy
             }
         };
+        console.log(this.fallbackPeerOptions);
     }
 
     public initializePeer(roomId: string, role: 'interviewer' | 'candidate'): void {
@@ -96,7 +96,7 @@ export class WebRtcService {
         const isLocal =
             window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-        const peerOptions: PeerOptions = isLocal
+        const peerOptions = isLocal
             ? {
                   host: 'localhost',
                   port: 9000,
@@ -105,9 +105,7 @@ export class WebRtcService {
               }
             : this.fallbackPeerOptions;
 
-        console.log(
-            `Initializing PeerJS: Using policy: [${peerOptions.config.iceTransportPolicy || 'default'}].`
-        );
+        console.log(peerOptions);
         console.log(
             `Initializing PeerJS in ${isLocal ? 'LOCAL LOOPBACK' : 'PRODUCTION CLOUD'} mode.`
         );

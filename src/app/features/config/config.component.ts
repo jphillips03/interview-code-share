@@ -70,6 +70,10 @@ export class ConfigComponent implements OnInit {
         const secureRoomId = `${roomId}_token_${cryptoToken}`;
         const fallbackUrl = `${CONFIG.baseUrl}/#/stage`;
 
+        if (this.turnUser && this.turnCred) {
+            this.webRtcService.initializeOpenRelayCredentials(this.turnUser, this.turnCred);
+        }
+
         // reset any cached data so previous code does not show
         this.webRtcService.resetLocalState();
         this.router.navigate([fallbackUrl], {
