@@ -8,7 +8,7 @@
  */
 
 export const CONFIG = {
-    baseUrl: 'https://jphillips03.github.io/interview-code-share/index.html',
+    baseUrl: 'https://jphillips03.github.io/interview-code-share',
     defaultEditorText: '// Interview code editor active.\n// Start typing code here...',
     language: 'java',
     theme: 'vs'
