@@ -8,7 +8,7 @@
  */
 
 import { inject, Injectable, NgZone, signal } from '@angular/core';
-import { Peer, DataConnection } from 'peerjs';
+import { Peer, DataConnection, PeerOptions } from 'peerjs';
 import { EditorPayload } from '@app/shared';
 import { CONFIG } from '../constants';
 
@@ -45,7 +45,7 @@ export class WebRtcService {
     public connectionStatus = signal<string>('⚡ Waiting for Peer Connection...');
     public currentRoomId = signal<string | null>(null);
 
-    private fallbackPeerOptions = {};
+    private fallbackPeerOptions: PeerOptions = {};
 
     public initializeOpenRelayCredentials(username: string, credential: string) {
         this.fallbackPeerOptions = {
@@ -75,10 +75,10 @@ export class WebRtcService {
                         username: username,
                         credential: credential
                     }
-                ]
-            },
-            // Optional: force the browser to prioritize relay candidates
-            iceTransportPolicy: 'relay' as RTCIceTransportPolicy
+                ],
+                // Optional: force the browser to prioritize relay candidates
+                iceTransportPolicy: 'relay' as RTCIceTransportPolicy
+            }
         };
     }
 
@@ -96,7 +96,7 @@ export class WebRtcService {
         const isLocal =
             window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-        const peerOptions = isLocal
+        const peerOptions: PeerOptions = isLocal
             ? {
                   host: 'localhost',
                   port: 9000,
@@ -106,7 +106,7 @@ export class WebRtcService {
             : this.fallbackPeerOptions;
 
         console.log(
-            `Initializing PeerJS: Using policy: [${peerOptions.iceTransportPolicy || 'default'}].`
+            `Initializing PeerJS: Using policy: [${peerOptions.config.iceTransportPolicy || 'default'}].`
         );
         console.log(
             `Initializing PeerJS in ${isLocal ? 'LOCAL LOOPBACK' : 'PRODUCTION CLOUD'} mode.`
