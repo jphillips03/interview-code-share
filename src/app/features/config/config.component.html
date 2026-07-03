@@ -4,11 +4,11 @@
         <p class="subtitle">Configure your peer-to-peer coding workspace.</p>
 
         <div class="card">
-            <h3>📋 Interview Pre-Flight Checklist</h3>
+            <h3>📋 Technical Interview Info</h3>
             <ul>
-                <li>✔️ No data is saved on external servers (Fully P2P).</li>
-                <li>✔️ Monaco Editor (VS Code engine) will load automatically.</li>
-                <li>✔️ A fallback link will be ready if your candidate is an external guest.</li>
+                <li>No data is saved on external servers (Fully P2P).</li>
+                <li>Monaco Editor (VS Code engine) will load automatically.</li>
+                <li>A fallback link will be ready if your candidate is an external guest.</li>
                 <li>
                     You will see '⚡ Waiting for Peer Connection...' in the top right corner of the
                     screen until anyone else connects to the room.
@@ -20,18 +20,21 @@
             </ul>
         </div>
 
-        <div class="selector-box">
-            <label for="lang-select">Default Coding Language:</label>
-            <select id="lang-select" [(ngModel)]="selectedLanguage">
-                <option value="java">Java</option>
-                <option value="javascript">JavaScript</option>
-                <option value="typescript">TypeScript</option>
-                <option value="python">Python</option>
-            </select>
+        <div class="card turn-settings">
+            <h3>💻 Default Coding Language</h3>
+            <div class="input-group">
+                <label for="lang-select">Language:</label>
+                <select id="lang-select" [(ngModel)]="selectedLanguage">
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="typescript">TypeScript</option>
+                    <option value="python">Python</option>
+                </select>
+            </div>
         </div>
 
         <div class="card turn-settings">
-            <h3>🌐 Enterprise ICE/TURN Server Configuration (optional)</h3>
+            <h3>🌐 Optional Enterprise ICE/TURN Server Configuration</h3>
             <p>
                 Credentials for open relay metered servers are optional below (free account options
                 available <a href="https://dashboard.metered.ca/signup">here</a>); A direct UDP
@@ -63,7 +66,7 @@
             <p class="status-text">Click "Save" below to add this tool to your meeting panel.</p>
         } @else {
             <p class="status-text">Click "Start" below to open up a new meeting room.</p>
-            <button (click)="onStart()">Start</button>
+            <button class="start-button" (click)="onStart()">Start</button>
         }
     </div>
 </div>
